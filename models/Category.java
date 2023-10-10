@@ -2,6 +2,9 @@ package mx.com.gm.HolaMundo.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Table
 public class Category {
@@ -23,8 +26,13 @@ public class Category {
     private String name_category;
     private String color;
 
+
     public Category(){
 
+    }
+
+    public Category(Long id_category) {
+        this.id_category = id_category;
     }
 
     public Category(Long id_category, String name_category, String color) {
