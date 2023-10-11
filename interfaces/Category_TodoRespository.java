@@ -4,6 +4,7 @@ import mx.com.gm.HolaMundo.models.Category_Todo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface Category_TodoRespository extends JpaRepository<Category_Todo, Long> {
@@ -15,6 +16,9 @@ public interface Category_TodoRespository extends JpaRepository<Category_Todo, L
             nativeQuery = true)
     Long findCategoryTodo(Long id_category, Long id_todo);
 
+    @Query(value = "SELECT * FROM category_todo where id_category = ?1",
+            nativeQuery = true)
+    List<Category_Todo> findCategoryTodoByIdCategory(Long id_category);
 
 
 }
