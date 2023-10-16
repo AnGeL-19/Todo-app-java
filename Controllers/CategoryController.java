@@ -6,10 +6,14 @@ import mx.com.gm.HolaMundo.models.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @RequestMapping(path = "api/v1/category")
 public class CategoryController {
@@ -19,6 +23,21 @@ public class CategoryController {
     @Autowired
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
+    }
+
+    @GetMapping("/{id_category}")
+    public Map<String, Object> getCategoryById(@PathVariable("id_category") Long id_category) {
+
+        Category categories = this.categoryService.getCategoryById(id_category);
+
+        Map<String, Object> map = new HashMap<String, Object>(); // use new HashMap<String, Object>(); for single result
+
+        map.put("status", true);
+        map.put("message", "Data is found");
+        map.put("data", categories);
+
+        return map;
+
     }
 
     @GetMapping("/")
@@ -37,17 +56,25 @@ public class CategoryController {
     }
 
 
-    @PostMapping("/")
+    @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
     public Map<String, Object> registerCategory(@RequestBody Category category) {
 
-        this.categoryService.addNewCategory(category);
+        Map<String, Object> map = new HashMap<String, Object >();
 
-        Map<String, Object> map = new HashMap<String, Object>(); // use new HashMap<String, Object>(); for single result
+        try {
 
-        map.put("status", true);
-        map.put("message", "Registered success");
+            this.categoryService.addNewCategory(category);
 
-        return map;
+            map.put("status", true);
+            map.put("message", "Data updated success");
+
+            return map;
+        } catch (Exception error) {
+            map.put("status", false);
+            map.put("message", "Error" + error.getMessage());
+
+            return map;
+        }
 
     }
 

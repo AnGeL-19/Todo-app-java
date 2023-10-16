@@ -25,24 +25,23 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    public Category getCategoryById(Long id) {
+
+        Category respCategory = this.categoryRepository.findById(id).orElseThrow(
+                ()-> new IllegalStateException("id_category "+id+" no exists")
+        );
+
+
+        return respCategory;
+
+    }
+
     public List<Category> getCategory() {
         return this.categoryRepository.findAll();
 
     }
 
     public void addNewCategory(Category category){
-
-        /*
-        if(optionalTodo.isPresent()){
-            throw new IllegalStateException("name_todo taken");
-        }
-
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        todo.setCreate_at(date);
-
-        System.out.println(todo);
-        */
 
         this.categoryRepository.save(category);
 

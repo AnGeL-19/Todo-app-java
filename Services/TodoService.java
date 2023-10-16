@@ -51,16 +51,15 @@ public class TodoService {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        todo.setCreate_at(date);
 
-        Todo newTodo = new Todo(todo.getName_todo(),todo.getCreate_at());
+        Todo newTodo = new Todo(todo.getName_todo(), date );
 
         Long idTodo = this.todoRepository.save(newTodo).getId_todo();
+
 
         List<Category_Todo> categoriesTodo = new ArrayList<Category_Todo>();
 
         for (Category category: todo.getCategories()) {
-            System.out.println(category.getId_category());
             categoriesTodo.add(new Category_Todo(idTodo, category.getId_category()));
         }
 
@@ -70,12 +69,6 @@ public class TodoService {
 
     public void deleteTodo(Long id) {
 
-        /*
-        Optional<Todo> optionalTodo = this.todoRepository.findTodoById(id);
-        if(optionalTodo.isEmpty()){
-            throw new IllegalStateException("id_todo no exists");
-        }
-        */
         boolean exists = this.todoRepository.existsById(id);
         if (!exists){
             throw new IllegalStateException("id_todo no exists");
@@ -109,12 +102,6 @@ public class TodoService {
             categoryTodosDel.addAll(respTodo.getCategories());
 
         }else {
-            /*
-
-             */
-
-            System.out.println(respTodo.getCategories() + " ---- resptodo");
-            System.out.println(todo.getCategories() + " ---- todo");
 
             categoryTodosDel.addAll(FilterFindObj.filterFindTwoObjets(
                     respTodo.getCategories(),
@@ -127,24 +114,15 @@ public class TodoService {
             ));
         }
 
-        System.out.println(categoryTodosAdd + " ---- categoryTodosAdd ----- ");
-        System.out.println(categoryTodosDel + " ---- categoryTodosDel ----- ");
-
-
         List<Category_Todo> categoriesTodoAdd = new ArrayList<>();
         List<Category_Todo> categoriesTodoDel = new ArrayList<>();
-
-
 
         if (categoryTodosAdd.toArray().length != 0){
 
             for ( Category category: categoryTodosAdd) {
                 categoriesTodoAdd.add(new Category_Todo(respTodo.getId_todo(), category.getId_category()));
             }
-
-
             this.category_TodoRespository.saveAll(categoriesTodoAdd);
-
         }
 
 
@@ -157,30 +135,10 @@ public class TodoService {
                         respTodo.getId_todo()
                 );
 
-                System.out.println(id_categorytodo);
-
                 categoriesTodoDel.add(new Category_Todo(id_categorytodo ,respTodo.getId_todo(), category.getId_category()));
-
             }
-
             this.category_TodoRespository.deleteAll(categoriesTodoDel);
-
-
         }
-
-
-
-
-
-        System.out.println("------------------");
-        System.out.println(categoriesTodoAdd);
-        System.out.println(categoriesTodoDel);
-
-/*
-
-
-
- */
 
     }
 
